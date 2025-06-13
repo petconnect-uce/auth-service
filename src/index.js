@@ -1,9 +1,22 @@
-const express = require('express');
-const app = express();
-const authRoutes = require('./routes/auth.js');
+require('dotenv').config(); // <--- Esto carga las variables del .env
 
+const express = require('express');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Conexión a MongoDB
+connectDB();
+
+// Middlewares
 app.use(express.json());
+
+// Rutas
 app.use('/api/auth', authRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Auth service running on port ${PORT}`));
+// Levantar servidor
+app.listen(port, () => {
+  console.log(`Auth service running on port ${port}`);
+});
