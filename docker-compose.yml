@@ -1,15 +1,26 @@
 version: '3.8'
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: auth_postgres
-    environment:
-      POSTGRES_DB: authdb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+  mongo:
+    image: mongo:6
+    container_name: mongo
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mongo_data:/data/db
+
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongo:27017/auth-db
+      - JWT_SECRET=tu_secreto_seguro
+    depends_on:
+      - mongo
+
 volumes:
-  pgdata:
+  mongo_data:
