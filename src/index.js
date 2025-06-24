@@ -4,6 +4,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -14,7 +15,7 @@ connectDB();
 app.use(express.json());
 
 // Rutas
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);  // <-- más limpio para el gateway
 
 // Iniciar servidor
 app.listen(port, () => {

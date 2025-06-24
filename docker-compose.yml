@@ -17,8 +17,8 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - MONGODB_URI=mongodb://mongo:27017/auth-db
-      - JWT_SECRET=tu_secreto_seguro
+      - MONGODB_URI=mongodb://mongo:27017/authdb
+      - JWT_SECRET=supersecreto123
     depends_on:
       - mongo
 

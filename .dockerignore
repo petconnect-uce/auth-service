@@ -1,5 +1,38 @@
+# node_modules: siempre se instalan en la imagen, no se copian
 node_modules
+
+# logs de npm
 npm-debug.log
-Dockerfile
-.dockerignore
+yarn-debug.log
+yarn-error.log
+
+# variables de entorno
 .env
+.env.local
+
+# configuraciones del IDE/editor
+.vscode
+.idea
+
+# directorios de pruebas
+coverage
+__tests__
+
+# archivos de pruebas
+*.test.js
+*.spec.js
+
+# documentación
+README.md
+LICENSE
+*.md
+
+# docker files (porque se copian solo lo necesario en el Dockerfile)
+docker-compose.yml
+Dockerfile
+
+# otros posibles
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
