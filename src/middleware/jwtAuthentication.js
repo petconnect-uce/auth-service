@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const jwtSecret = process.env.JWT_SECRET || 'supersecreto123'; // tu clave secreta
+const jwtSecret = process.env.JWT_SECRET || 'supersecreto123diegopetconnect456'; // tu clave secreta
 
 function jwtAuthenticationMiddleware(req, res, next) {
   const authHeader = req.headers['authorization'];
