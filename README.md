@@ -20,7 +20,3 @@ Este microservicio se encarga de:
 
 ## 🔐 Variables de entorno
 
-```env
-PORT=3000
-MONGODB_URI=mongodb://mongo:27017/authdb
-JWT_SECRET=supersecreto123diegopetconnect456
