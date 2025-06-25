@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log
+.env
+.DS_Store
+coverage/
+dist/
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+*.out
+*.gz
+
+# Test
+jest-output/
