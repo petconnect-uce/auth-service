@@ -57,7 +57,17 @@ router.post(
 
       await user.save();
 
-      res.status(201).json({ message: 'User registered successfully' });
+      // Generar token JWT para el nuevo usuario
+      const accessToken = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+
+      // También podrías crear un refreshToken si quieres (opcional)
+
+      // Enviar token al frontend
+      res.status(201).json({ token: accessToken, userId: user._id });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
