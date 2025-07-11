@@ -21,7 +21,7 @@ __tests__
 # archivos de pruebas
 *.test.js
 *.spec.js
-
+tests/
 # documentación
 README.md
 LICENSE
@@ -36,3 +36,7 @@ Dockerfile
 *.swo
 .DS_Store
 Thumbs.db
+
+.dockerignore
+.git
+.gitignore
