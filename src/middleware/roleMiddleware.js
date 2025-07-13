@@ -11,7 +11,3 @@ function authorizeRoles(...allowedRoles) {
 
 module.exports = authorizeRoles;
 
-
-
-
-

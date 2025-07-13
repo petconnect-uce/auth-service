@@ -51,7 +51,7 @@ router.post(
       await user.save();
 
       // Llamar a registration-service
-      await axios.post('http://registration-service:8082/api/registration/register', {
+      await axios.post('http://registration-service:8082/api/v1/registration/register', {
         fullName,
         email,
         password,

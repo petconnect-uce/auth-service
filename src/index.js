@@ -1,15 +1,24 @@
-require('dotenv').config(); // Variables de entorno
+require('dotenv').config();
 
 const express = require('express');
 const connectDB = require('./config/db');
-const redisClient = require('./config/redis'); // conexión redis
+const redisClient = require('./config/redis');
 const authRoutes = require('./routes/auth');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
+// Middleware para parsear JSON
 app.use(express.json());
+
+// Middleware CORS global (opcional pero recomendado)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
 
 // Conexión a MongoDB
 connectDB();
@@ -23,10 +32,10 @@ redisClient.connect()
     console.error('❌ Error al conectar con Redis:', err);
   });
 
-// Health-check
+// Endpoint de salud
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-// Rutas principales
+// Rutas de autenticación
 app.use('/api/v1/auth', authRoutes);
 
 // Middleware para rutas no encontradas
