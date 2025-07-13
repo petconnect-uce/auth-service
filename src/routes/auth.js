@@ -55,7 +55,6 @@ router.post(
         fullName,
         email,
         password,
-        authUserId: user._id.toString()
       });
 
       const accessToken = jwt.sign(
