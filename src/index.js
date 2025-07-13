@@ -9,11 +9,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware para parsear JSON
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+
 
 // Middleware CORS global
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // O especificar dominios en prod
+  res.header('Access-Control-Allow-Origin', '*'); // En producción puedes restringir a tus dominios
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.sendStatus(200);
@@ -23,17 +24,17 @@ app.use((req, res, next) => {
 // Conexión a MongoDB
 connectDB();
 
-// Conexión a Redis
+// Conexión a Redis con manejo de errores críticos
 redisClient.connect()
   .then(() => {
     console.log('✅ Redis conectado');
   })
   .catch(err => {
     console.error('❌ Error al conectar con Redis:', err.message);
-    process.exit(1); // Detiene el servicio si Redis falla
+    process.exit(1); // Termina el proceso si Redis no está disponible
   });
 
-// Endpoint de salud
+// Endpoint de salud para monitoreo
 app.get('/health', (_, res) => res.status(200).send('OK'));
 
 // Rutas principales del servicio

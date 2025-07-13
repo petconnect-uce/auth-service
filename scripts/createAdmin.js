@@ -14,7 +14,7 @@ const createAdmin = async () => {
       return process.exit(0);
     }
 
-    const hashedPassword = await bcrypt.hash('Diego123!', 10);     // password de admin
+    const hashedPassword = await bcrypt.hash('Diego123$', 10);     // password de admin
 
     const admin = new User({
       username: 'diegoadmin',
