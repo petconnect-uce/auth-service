@@ -1,10 +1,11 @@
+// routes/auth.js
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const redis = require('redis');
-const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
 const User = require('../models/User.js');
@@ -22,6 +23,7 @@ router.post(
       .notEmpty().withMessage('Username is required')
       .isLength({ min: 3 }).withMessage('Username must be at least 3 characters')
       .matches(/^[a-zA-Z0-9]+$/).withMessage('Only letters and numbers allowed'),
+    body('fullName').notEmpty().withMessage('Full name is required'),
     body('email').isEmail().withMessage('Invalid email address'),
     body('password')
       .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
@@ -32,8 +34,6 @@ router.post(
     body('role')
       .optional()
       .isIn(['usuario', 'refugio']).withMessage('Role must be "usuario" or "refugio"'),
-    body('fullName')
-      .notEmpty().withMessage('Full name is required')
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -47,15 +47,15 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const user = new User({ username, email, password: hashedPassword, role: role || 'usuario' });
-      await user.save();
-
-      // Llamar a registration-service
-      await axios.post('http://registration-service:8082/api/v1/registration/register', {
+      const user = new User({
+        username,
         fullName,
         email,
-        password,
+        password: hashedPassword,
+        role: role || 'usuario'
       });
+
+      await user.save();
 
       const accessToken = jwt.sign(
         { id: user._id, role: user.role },
@@ -65,7 +65,7 @@ router.post(
 
       res.status(201).json({ token: accessToken, userId: user._id });
     } catch (err) {
-      console.error(err);
+      console.error('❌ Error en auth-service:', err.message);
       res.status(500).json({ message: 'Server error' });
     }
   }

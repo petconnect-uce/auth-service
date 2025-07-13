@@ -11,11 +11,11 @@ const port = process.env.PORT || 3000;
 // Middleware para parsear JSON
 app.use(express.json());
 
-// Middleware CORS global (opcional pero recomendado)
+// Middleware CORS global
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Origin', '*'); // O especificar dominios en prod
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
 });
@@ -29,17 +29,18 @@ redisClient.connect()
     console.log('✅ Redis conectado');
   })
   .catch(err => {
-    console.error('❌ Error al conectar con Redis:', err);
+    console.error('❌ Error al conectar con Redis:', err.message);
+    process.exit(1); // Detiene el servicio si Redis falla
   });
 
 // Endpoint de salud
-app.get('/health', (req, res) => res.status(200).send('OK'));
+app.get('/health', (_, res) => res.status(200).send('OK'));
 
-// Rutas de autenticación
+// Rutas principales del servicio
 app.use('/api/v1/auth', authRoutes);
 
 // Middleware para rutas no encontradas
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ error: 'Ruta no encontrada en auth-service' });
 });
 
